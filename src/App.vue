@@ -1,12 +1,18 @@
 <template>
   <div class="container">
-    <div class="block" :class="{animation:animate}"></div>
+    <div class="block" :class="{ animation: animate }"></div>
     <button @click="getAnimate">Animate</button>
   </div>
   <base-modal @close="hideDialog" v-if="dialogIsVisible">
     <p>This is a test dialog!</p>
     <button @click="hideDialog">Close it!</button>
   </base-modal>
+  <div class="container">
+    <transition>
+      <p v-if="paragraphVisiblity">This is paragraph which is toggle</p>
+    </transition>
+    <button @click="toggleParagraph">Toggle Paragraph</button>
+  </div>
   <div class="container">
     <button @click="showDialog">Show Dialog</button>
   </div>
@@ -15,14 +21,14 @@
 <script>
 export default {
   data() {
-    return { 
-      dialogIsVisible: false,
-      animate:false,
-     };
+    return { dialogIsVisible: false, animate: false, paragraphVisiblity: false };
   },
   methods: {
-    getAnimate(){
-      this.animate=true;
+    toggleParagraph() {
+      this.paragraphVisiblity=!this.paragraphVisiblity;
+    },
+    getAnimate() {
+      this.animate = true;
     },
     showDialog() {
       this.dialogIsVisible = true;
@@ -76,14 +82,41 @@ button:active {
   border: 2px solid #ccc;
   border-radius: 12px;
 }
-.animation{
-  /* transform:translateX(-150px); */
+.animation {
+  /* transform : translateX(-150px); */
   animation: slide-fade 0.3s ease-out forwards;
 }
 
-@keyframes slide-fade{
+.v-enter-from{
+  opacity:0;
+  transform: translateY(-30px);
+}
+
+.v-enter-active{
+  transition: all 0.3s ease-out;
+}
+
+.v-enter-to{
+  opacity: 1;
+  transform: translateY(0);
+}
+.v-leave-from{
+  opacity:1;
+  transform: translateY(0);
+}
+
+.v-leave-active{
+  transition: all 0.3s ease-in;
+}
+
+.v-leave-to{
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes slide-fade {
   0% {
-    transform: translateX(0) scale(1)
+    transform: translateX(0) scale(1);
   }
   70% {
     transform: translateX(-120px) scale(1.1);
