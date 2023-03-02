@@ -5,12 +5,18 @@
   </div>
   <div class="container">
     <transition name="para">
-      <p v-if="paragraphVisiblity">This is paragraph which will toggle</p>
+      <p v-if="paraVisiblity">This paragraph will toggle on button</p>
     </transition>
-    <button @click="Toggle">Toggle paragraph</button>
+    <button @click="togglePara">Toggle</button>
+  </div>
+  <div class="container">
+    <transition name="showHide" mode="out-in">
+    <button @click="showVisiblity=true" v-if="!showVisiblity">Show</button>
+    <button @click="showVisiblity=false" v-else>Hide</button>
+    </transition>
   </div>
   <base-modal @close="hideDialog" :open="dialogIsVisible">
-    <p>This is a test dialog!</p>
+    <p >This is a test dialog!</p>
     <button @click="hideDialog">Close it!</button>
   </base-modal>
   <div class="container">
@@ -21,14 +27,19 @@
 <script>
 export default {
   data() {
-    return { dialogIsVisible: false,animate:false,paragraphVisiblity:false};
+    return { 
+      dialogIsVisible: false,
+      animate:false,
+      paraVisiblity:false,
+      showVisiblity:false,
+     };
   },
   methods: {
-    Toggle(){
-      this.paragraphVisiblity=!this.paragraphVisiblity;
+    togglePara(){
+      this.paraVisiblity=!this.paraVisiblity;
     },
     getAnimate(){
-    this.animate=true;
+      this.animate=true;
     },
     showDialog() {
       this.dialogIsVisible = true;
@@ -69,7 +80,7 @@ button:active {
   height: 8rem;
   background-color: #290033;
   margin-bottom: 2rem;
-  transition: transform 0.3s ease-out;
+  /* transition: transform 0.3s ease-out; */
 }
 .container {
   max-width: 40rem;
@@ -82,10 +93,9 @@ button:active {
   border: 2px solid #ccc;
   border-radius: 12px;
 }
-
 .animation{
-  /* animation: slide-scale 0.3s ease-out forwards; */
-  transform : translateX(-150px);
+  /* transform:translateX(-150px); */
+  animation:slide-scale 0.3s ease-out forwards;
 }
 
 .para-enter-from{
@@ -99,6 +109,7 @@ button:active {
   opacity: 1;
   transform: translateY(0)
 }
+
 .para-leave-from{
   opacity: 1;
   transform: translateY(0)
@@ -111,15 +122,34 @@ button:active {
   transform: translateY(30px)
 }
 
+.showHide-enter-from,
+.showHide-leave-from{
+  opacity: 0;
+}
+.showHide-enter-active{
+  transition: opacity 0.3s ease-out;
+}
+.showHide-leave-active{
+  transition: opacity 0.3s ease-in;
+}
+
+.showHide-enter-to,
+.showHide-leave-from
+{
+  opacity: 1;
+}
+
+
 @keyframes slide-scale {
   0%{
-    transform:translateX(0) scale(1)
+    transform: translateX(0) scale(1)
   }
   70%{
-    transform:translateX(-120px) scale(1.1)
+    transform: translateX(-120px) scale(1.1)
   }
   100%{
-    transform:translateX(-150px) scale(1)
+    transform: translateX(-150px) scale(1)
   }
 }
+
 </style>
