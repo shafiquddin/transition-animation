@@ -1,22 +1,22 @@
 <template>
   <div class="container">
-    <div class="block" :class="{animation:animate}"></div>
+    <div class="block" :class="{ animation: animate }"></div>
     <button @click="getAnimate">Animate</button>
   </div>
   <div class="container">
     <transition name="para">
-      <p v-if="paraVisiblity">This paragraph will toggle on button</p>
+      <p v-if="paraVisiblity">This paragaph will animate</p>
     </transition>
-    <button @click="togglePara">Toggle</button>
+    <button @click="getToggle">Toggle</button>
   </div>
   <div class="container">
     <transition name="showHide" mode="out-in">
-    <button @click="showVisiblity=true" v-if="!showVisiblity">Show</button>
-    <button @click="showVisiblity=false" v-else>Hide</button>
+      <button @click="btnVisiblity = true" v-if="!btnVisiblity">Show</button>
+      <button @click="btnVisiblity = false" v-else>Hide</button>
     </transition>
   </div>
   <base-modal @close="hideDialog" :open="dialogIsVisible">
-    <p >This is a test dialog!</p>
+    <p>This is a test dialog!</p>
     <button @click="hideDialog">Close it!</button>
   </base-modal>
   <div class="container">
@@ -27,19 +27,19 @@
 <script>
 export default {
   data() {
-    return { 
+    return {
       dialogIsVisible: false,
-      animate:false,
-      paraVisiblity:false,
-      showVisiblity:false,
-     };
+      animate: false,
+      paraVisiblity: false,
+      btnVisiblity: false,
+    };
   },
   methods: {
-    togglePara(){
-      this.paraVisiblity=!this.paraVisiblity;
+    getToggle() {
+      this.paraVisiblity = !this.paraVisiblity;
     },
-    getAnimate(){
-      this.animate=true;
+    getAnimate() {
+      this.animate = true;
     },
     showDialog() {
       this.dialogIsVisible = true;
@@ -93,38 +93,38 @@ button:active {
   border: 2px solid #ccc;
   border-radius: 12px;
 }
-.animation{
+
+.animation {
   /* transform:translateX(-150px); */
-  animation:slide-scale 0.3s ease-out forwards;
+  animation: slide-scale 0.3s ease-out forwards;
 }
 
-.para-enter-from{
+.para-enter-from {
   opacity: 0;
-  transform: translateY(-30px)
+  transform: translateY(-30px);
 }
-.para-enter-active{
+.para-enter-active {
   transition: all 0.3s ease-out;
 }
-.para-enter-to{
+.para-enter-to {
   opacity: 1;
-  transform: translateY(0)
+  transform: translateY(0);
 }
-
-.para-leave-from{
+.para-leave-from {
   opacity: 1;
-  transform: translateY(0)
+  transform: translateY(0);
 }
-.para-leave-active{
-  transition: all 0.3s ease-in;
+.para-leave-active {
+  transition: all 0.3s ease-out;
 }
-.para-leave-to{
+.para-leave-to {
   opacity: 0;
-  transform: translateY(30px)
+  transform: translateY(30px);
 }
 
-.showHide-enter-from,
+.showHide-enter-to,
 .showHide-leave-from{
-  opacity: 0;
+  opacity: 1;
 }
 .showHide-enter-active{
   transition: opacity 0.3s ease-out;
@@ -132,24 +132,20 @@ button:active {
 .showHide-leave-active{
   transition: opacity 0.3s ease-in;
 }
-
-.showHide-enter-to,
-.showHide-leave-from
-{
-  opacity: 1;
+.showHide-enter-from,
+.showHide-leave-to{
+  opacity: 0;
 }
-
 
 @keyframes slide-scale {
-  0%{
-    transform: translateX(0) scale(1)
+  0% {
+    transform: translateX(0) scale(1);
   }
-  70%{
-    transform: translateX(-120px) scale(1.1)
+  70% {
+    transform: translateX(-120px) scale(1.1);
   }
-  100%{
-    transform: translateX(-150px) scale(1)
+  100% {
+    transform: translateX(-150px) scale(1);
   }
 }
-
 </style>
