@@ -4,7 +4,17 @@
     <button @click="getAnimate">Animate</button>
   </div>
   <div class="container">
-    <transition name="para">
+    <transition
+      name="para"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @before-leave="beforeLeave"
+      @leave="leave"
+      @after-leave="afterLeave"
+      @enter-cancelled="enteredCancelled"
+      @leave-cancelled="leavedCancelled"
+    >
       <p v-if="paraVisiblity">This paragaph will animate</p>
     </transition>
     <button @click="getToggle">Toggle</button>
@@ -25,6 +35,7 @@
 </template>  
 
 <script>
+
 export default {
   data() {
     return {
@@ -32,9 +43,64 @@ export default {
       animate: false,
       paraVisiblity: false,
       btnVisiblity: false,
+      enterIntervel:null,
+      leaveIntervel:null,
     };
   },
   methods: {
+    enteredCancelled(el){
+      console.log(el);
+      clearInterval(this.enterIntervel);
+    },
+    leavedCancelled(el){
+      console.log(el);
+      clearInterval(this.leaveIntervel);
+    },
+    beforeEnter(el) {
+      console.log("beforeEnter");
+      el.style.opacity=0;
+    },
+    enter(el,done) {
+      console.log("Enter");
+      console.log(el);
+      let round=1;
+      this.enterIntervel = setInterval(()=>{
+        el.style.opacity=round*0.01;
+        round++;
+        if(round>100){
+          clearInterval(this.enterIntervel);
+          done();
+        }
+      },20)
+    },
+    afterEnter(el) {
+      console.log("afterEnter");
+      console.log(el);
+      el.style.opacity=1;
+    },
+    beforeLeave(el) {
+      console.log("beforeLeave");
+      console.log(el);
+      el.style.opacity=1;
+    },
+    leave(el,done) {
+      console.log("leave");
+      console.log(el);
+      let round=1;
+      this.leaveIntervel = setInterval(()=>{
+        el.style.opacity= 1 - round*0.01;
+        round++;
+        if(round>100){
+          clearInterval(this.leaveIntervel);
+          done();
+        }
+      },20)
+    },
+    afterLeave(el) {
+      console.log("afterLeave");
+      console.log(el);
+      el.style.opacity=0;
+    },
     getToggle() {
       this.paraVisiblity = !this.paraVisiblity;
     },
@@ -99,12 +165,12 @@ button:active {
   animation: slide-scale 0.3s ease-out forwards;
 }
 
-.para-enter-from {
+/* .para-enter-from {
   opacity: 0;
   transform: translateY(-30px);
 }
 .para-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 2s ease-out;
 }
 .para-enter-to {
   opacity: 1;
@@ -120,20 +186,20 @@ button:active {
 .para-leave-to {
   opacity: 0;
   transform: translateY(30px);
-}
+} */
 
 .showHide-enter-to,
-.showHide-leave-from{
+.showHide-leave-from {
   opacity: 1;
 }
-.showHide-enter-active{
+.showHide-enter-active {
   transition: opacity 0.3s ease-out;
 }
-.showHide-leave-active{
+.showHide-leave-active {
   transition: opacity 0.3s ease-in;
 }
 .showHide-enter-from,
-.showHide-leave-to{
+.showHide-leave-to {
   opacity: 0;
 }
 
