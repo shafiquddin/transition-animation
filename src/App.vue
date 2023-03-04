@@ -5,15 +5,15 @@
   </div>
   <div class="container">
     <transition
-      name="para"
+      :css="false"
       @before-enter="beforeEnter"
       @enter="enter"
       @after-enter="afterEnter"
       @before-leave="beforeLeave"
       @leave="leave"
       @after-leave="afterLeave"
-      @enter-cancelled="enteredCancelled"
-      @leave-cancelled="leavedCancelled"
+      @enter-cancelled="enterCancelled"
+      @leave-cancelled="leaveCancelled"
     >
       <p v-if="paraVisiblity">This paragaph will animate</p>
     </transition>
@@ -44,27 +44,18 @@ export default {
       paraVisiblity: false,
       btnVisiblity: false,
       enterIntervel:null,
-      leaveIntervel:null,
+      leaveIntervel:null
     };
   },
   methods: {
-    enteredCancelled(el){
+    beforeEnter(el){
       console.log(el);
-      clearInterval(this.enterIntervel);
-    },
-    leavedCancelled(el){
-      console.log(el);
-      clearInterval(this.leaveIntervel);
-    },
-    beforeEnter(el) {
-      console.log("beforeEnter");
       el.style.opacity=0;
     },
-    enter(el,done) {
-      console.log("Enter");
+    enter(el,done){
       console.log(el);
       let round=1;
-      this.enterIntervel = setInterval(()=>{
+      this.enterIntervel=setInterval(()=>{
         el.style.opacity=round*0.01;
         round++;
         if(round>100){
@@ -73,22 +64,19 @@ export default {
         }
       },20)
     },
-    afterEnter(el) {
-      console.log("afterEnter");
+    afterEnter(el){
       console.log(el);
       el.style.opacity=1;
     },
-    beforeLeave(el) {
-      console.log("beforeLeave");
+    beforeLeave(el){
       console.log(el);
       el.style.opacity=1;
     },
-    leave(el,done) {
-      console.log("leave");
+     leave(el,done){
       console.log(el);
       let round=1;
-      this.leaveIntervel = setInterval(()=>{
-        el.style.opacity= 1 - round*0.01;
+      this.leaveIntervel=setInterval(()=>{
+        el.style.opacity=1-round*0.01;
         round++;
         if(round>100){
           clearInterval(this.leaveIntervel);
@@ -96,10 +84,17 @@ export default {
         }
       },20)
     },
-    afterLeave(el) {
-      console.log("afterLeave");
+    afterLeave(el){
       console.log(el);
       el.style.opacity=0;
+    },
+    enterCancelled(el){
+      console.log(el);
+      clearInterval(this.enterIntervel);
+    },
+    leaveCancelled(el){
+      console.log(el);
+      clearInterval(this.leaveIntervel);
     },
     getToggle() {
       this.paraVisiblity = !this.paraVisiblity;
