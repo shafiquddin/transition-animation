@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <base-user></base-user>
+  </div>
+  <div class="container">
     <div class="block" :class="{ animation: animate }"></div>
     <button @click="getAnimate">Animate</button>
   </div>
@@ -35,7 +38,7 @@
 </template>  
 
 <script>
-
+import BaseUser from './components/BaseUser.vue';
 export default {
   data() {
     return {
@@ -46,6 +49,9 @@ export default {
       enterIntervel:null,
       leaveIntervel:null
     };
+  },
+  components:{
+    BaseUser,
   },
   methods: {
     beforeEnter(el){
